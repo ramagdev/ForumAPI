@@ -21,7 +21,7 @@ describe('/GET endpoint', () => {
             // Assert
             const responseJson = JSON.parse(response.payload)
             expect(response.statusCode).toEqual(200)
-            expect(responseJson.data).toEqual('Hello world!')
+            expect(responseJson.data).toEqual('Bam Bam, Hello world!')
         })
     })
 })

@@ -3,7 +3,7 @@ const routes = () => ([
         method: 'GET',
         path: '/',
         handler: () => ({
-            data: 'Hello world!',
+            data: 'Bam Bam, Hello world!',
         })
     }
 ])
