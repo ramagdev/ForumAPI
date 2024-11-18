@@ -1,9 +1,9 @@
 const routes = require('./routes')
 
 module.exports = {
-    name: 'helloworld',
+  name: 'helloworld',
 
-    register: async (server) => {
-        server.route(routes())
-    }
+  register: async (server) => {
+    server.route(routes())
+  }
 }

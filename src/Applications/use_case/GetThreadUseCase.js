@@ -1,8 +1,9 @@
 const ThreadDetail = require('../../Domains/threads/entities/ThreadDetail')
 class GetThreadUseCase {
-  constructor ({ threadRepository, commentRepository, replyRepository, userRepository }) {
+  constructor ({ threadRepository, commentRepository, likeRepository, replyRepository, userRepository }) {
     this._threadRepository = threadRepository
     this._commentRepository = commentRepository
+    this._likeRepository = likeRepository
     this._replyRepository = replyRepository
     this._userRepository = userRepository
   }
@@ -20,6 +21,7 @@ class GetThreadUseCase {
       }
       delete comment.is_deleted
       comment.username = await this._userRepository.getUsernameById(comment.owner)
+      comment.likeCount = await this._likeRepository.getLikeCount(comment.id)
     }
     const threadReplies = await this._replyRepository.getThreadReplies(threadId)
     for (const reply of threadReplies) {

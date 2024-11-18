@@ -1,7 +1,7 @@
 const CreateReply = require('../../Domains/replies/entities/CreateReply')
 class AddReplyUseCase {
   constructor ({ replyRepository, commentRepository, threadRepository }) {
-    this.replyRepository = replyRepository
+    this._replyRepository = replyRepository
     this._commentRepository = commentRepository
     this._threadRepository = threadRepository
   }
@@ -10,7 +10,7 @@ class AddReplyUseCase {
     const createReply = new CreateReply(useCasePayload)
     await this._threadRepository.verifyThreadAvailability(threadId)
     await this._commentRepository.verifyCommentAvailability(commentId)
-    const response = await this.replyRepository.addReply(userId, threadId, commentId, createReply)
+    const response = await this._replyRepository.addReply(userId, threadId, commentId, createReply)
     return response
   }
 }
