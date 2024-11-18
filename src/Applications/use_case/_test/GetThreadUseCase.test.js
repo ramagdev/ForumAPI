@@ -3,6 +3,7 @@ const ThreadRepository = require('../../../Domains/threads/ThreadRepository')
 const CommentRepository = require('../../../Domains/comments/CommentRepository')
 const ReplyRepository = require('../../../Domains/replies/ReplyRepository')
 const UserRepository = require('../../../Domains/users/UserRepository')
+const LikeRepository = require('../../../Domains/likes/LikeRepository')
 
 describe('GetThreadUseCase', () => {
   it('should orchestrating the get thread action correctly', async () => {
@@ -62,6 +63,7 @@ describe('GetThreadUseCase', () => {
     const mockCommentRepository = new CommentRepository()
     const mockReplyRepository = new ReplyRepository()
     const mockUserRepository = new UserRepository()
+    const mockLikeRepository = new LikeRepository()
 
     /** mocking needed function */
     mockThreadRepository.verifyThreadAvailability = jest.fn()
@@ -88,10 +90,21 @@ describe('GetThreadUseCase', () => {
         }
       }
     )
+    mockLikeRepository.getLikeCount = jest.fn(
+      (commentId) => {
+        if (commentId === 'comment-123') {
+          return Promise.resolve(1)
+        }
+        if (commentId === 'comment-456') {
+          return Promise.resolve(0)
+        }
+      }
+    )
 
     const getThreadUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
+      likeRepository: mockLikeRepository,
       replyRepository: mockReplyRepository,
       userRepository: mockUserRepository
     })
@@ -109,6 +122,9 @@ describe('GetThreadUseCase', () => {
     expect(mockUserRepository.getUsernameById).toBeCalledWith(mockThreadComments[1].owner)
     expect(mockUserRepository.getUsernameById).toBeCalledWith(mockThreadReplies[0].owner)
     expect(mockUserRepository.getUsernameById).toBeCalledWith(mockThreadReplies[1].owner)
+
+    expect(mockLikeRepository.getLikeCount).toBeCalledWith(mockThreadComments[0].id)
+    expect(mockLikeRepository.getLikeCount).toBeCalledWith(mockThreadComments[1].id)
 
     expect(threadDetail.thread.comments[1].content).toStrictEqual('**komentar telah dihapus**')
 
@@ -141,7 +157,8 @@ describe('GetThreadUseCase', () => {
                   username: 'dicodingindonesia'
                 }
               ],
-              content: 'sebuah comment'
+              content: 'sebuah comment',
+              likeCount: 1
             },
             {
               id: 'comment-456',
@@ -150,7 +167,8 @@ describe('GetThreadUseCase', () => {
               replies: [
 
               ],
-              content: '**komentar telah dihapus**'
+              content: '**komentar telah dihapus**',
+              likeCount: 0
             }
           ]
         }

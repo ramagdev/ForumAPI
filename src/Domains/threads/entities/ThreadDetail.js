@@ -33,7 +33,8 @@ class ThreadDetail {
       username: comment.username,
       date: comment.date,
       replies: newReplies.filter((reply) => reply.commentId === comment.id),
-      content: comment.content
+      content: comment.content,
+      likeCount: comment.likeCount
     }))
 
     for (const reply of newReplies) {

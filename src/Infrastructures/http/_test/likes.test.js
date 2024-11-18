@@ -91,13 +91,18 @@ describe('/likes endpoint', () => {
       }
 
       /** add user */
-      await server.inject({
+      const addUserResponse = await server.inject({
         method: 'POST',
         url: '/users',
         payload: mockUser
       })
 
+      /** add thread */
+      const addUserResponseJson = JSON.parse(addUserResponse.payload)
+      const { id: userId } = addUserResponseJson.data.addedUser
+
       // Action
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: userId })
 
       const authResponse = await server.inject({
         method: 'POST',
@@ -171,7 +176,7 @@ describe('/likes endpoint', () => {
       expect(response.statusCode).toEqual(200)
       expect(responseJson.status).toEqual('success')
 
-      const likeCount = await LikesTableTestHelper.findLikeCount('comment-123')
+      const likeCount = await LikesTableTestHelper.getLikeCount('comment-123')
       expect(likeCount).toEqual(1)
     })
 
@@ -198,7 +203,7 @@ describe('/likes endpoint', () => {
       // Action
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: userId })
       await CommentsTableTestHelper.addComment({ id: 'comment-123', owner: userId, threadId: 'thread-123' })
-      await LikesTableTestHelper.addLike({ id: 'like-123', owner: userId, commentId: 'comment-123' })
+      await LikesTableTestHelper.addLike({ id: 'like-123', commentId: 'comment-123', userId })
 
       const authResponse = await server.inject({
         method: 'POST',
@@ -224,7 +229,7 @@ describe('/likes endpoint', () => {
       expect(response.statusCode).toEqual(200)
       expect(responseJson.status).toEqual('success')
 
-      const likeCount = await LikesTableTestHelper.findLikeCount('comment-123')
+      const likeCount = await LikesTableTestHelper.getLikeCount('comment-123')
       expect(likeCount).toEqual(0)
     })
   })

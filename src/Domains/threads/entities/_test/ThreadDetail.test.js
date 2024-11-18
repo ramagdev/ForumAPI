@@ -43,14 +43,16 @@ describe('formattedDetail getter', () => {
           content: 'sebuah comment',
           date: '2020-01-01T00:00:00.000Z',
           owner: 'user-1234',
-          username: 'awsdicoding'
+          username: 'awsdicoding',
+          likeCount: 1
         },
         {
           id: 'comment-456',
           content: '**komentar telah dihapus**',
           date: '2020-01-01T00:00:00.000Z',
           owner: 'user-12345',
-          username: 'awsdicodingindonesia'
+          username: 'awsdicodingindonesia',
+          likeCount: 0
         }
       ],
       threadReplies: [
@@ -91,7 +93,8 @@ describe('formattedDetail getter', () => {
               date: '2020-01-01T00:00:00.000Z',
               username: 'awsdicodingindonesia'
             }],
-            content: 'sebuah comment'
+            content: 'sebuah comment',
+            likeCount: 1
           },
           {
             id: 'comment-456',
@@ -105,7 +108,8 @@ describe('formattedDetail getter', () => {
                 username: 'awsdicodingindonesia'
               }
             ],
-            content: '**komentar telah dihapus**'
+            content: '**komentar telah dihapus**',
+            likeCount: 0
           }
         ]
       }
